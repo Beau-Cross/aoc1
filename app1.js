@@ -1,55 +1,39 @@
 var fs = require('fs');
-//setting up some values
+
 var i=0;
 var s = "";
 var sum = 0;
+var data = 0;
+
+fs.truncate('outputRaw.txt');
+fs.truncate('outputClean.txt');
 
 fs.readFile('input.txt','utf8', function(err, data){
     for (i=0;i<data.length;i++) {
+      s += data[i]+" ";
 
-      //fetching data
-      var dataLocationFirst = data.charAt(i);
-      var dataLocationNext = data.charAt(i+1);
-
-      //for the logs
-      s += dataLocationFirst + " ";
-
-      //conversion to numbers
-      var numberDataLocationFirst = parseInt(dataLocationFirst);
-
-      //collection of alike
-      var alike = numberDataLocationFirst;
-
-
-      //check conditions
-      if (dataLocationFirst == dataLocationNext) {
-
-        //writing the raw data
-        fs.appendFile('outputRaw.txt',alike,function(err){
+      if (data[i] == data[i+1]) {
+        fs.appendFile('outputRaw.txt',data[i],function(err){
           if (err) throw err;
         });
-
-        //summation equation
-
       }
     }
-
-
-    //log position
     console.log(s);
-
 });
 
 setTimeout(function () {
   fs.readFile('outputRaw.txt','utf8',function(err,dataRaw){
     var sum = 0;
     for (i=0;i<dataRaw.length;i++) {
-      var summingNumber = dataRaw.charAt(i);
-      var summingData = parseInt(summingNumber);
-      sum += summingData;
+      var dataRawS = dataRaw[i];
+      var dataRawI = parseInt(dataRawS);
+      sum += dataRawI;
     }
     fs.appendFile('outputClean.txt',sum,function(err){
       if (err) throw err;
     });
+    console.log("--------------------------");
+    console.log("Your sum is: "+sum+" (OwO )");
+    console.log("--------------------------");
   });
-}, 2000);
+}, 1000);
